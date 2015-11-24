@@ -1,0 +1,12 @@
+;;gitignore for Django using PyCharm
+
+;;files to ignore
+settings.py
+
+;;extensions to ignore
+*.log
+*.pot
+*.pyc
+
+;;directions to ignore
+.idea/
