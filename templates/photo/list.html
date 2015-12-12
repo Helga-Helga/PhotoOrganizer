@@ -1,19 +1,19 @@
 {% extends "pbase.html" %}
 
 {% block content %}
-    <div class="main">
+    <div class="container">
 
         <!-- Albums -->
-        <ul>
+        <dl class="">
             {% for album in albums.object_list %}
-                <div class="title">{{ album.title }} ({{ album.image_set.count }} images)</div>
-                <ul>
+                <dt>{{ album.title }} ({{ album.image_set.count }} images)</dt>
+                <dd>
                     {%  for img in album.images %}
                         <a href="{{ img.image.url }}"><img border="0" alt="" src="{{ img.thumbnail2.url }}" /></a>
                     {% endfor %}
-                </ul>
+                </dd>
             {% endfor %}
-        </ul>
+        </dl>
 
     <!-- Next/Prev page links -->
     {% if albums.objects_list and albums.paginator.num_pages > 1 %}

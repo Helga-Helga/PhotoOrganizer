@@ -52,6 +52,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
+)
+
 ROOT_URLCONF = 'PhotoOrganizer.urls'
 
 TEMPLATES = [
@@ -66,6 +71,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                'django.contrib.staticfiles',
             ],
         },
     },
@@ -102,7 +108,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'http://127.0.0.1:8000/static/'
 MEDIA_URL = '/media/'
 
 DJANGO_ROOT = dirname(dirname(abspath(__file__)))
