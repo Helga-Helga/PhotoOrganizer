@@ -42,6 +42,7 @@ class Image(models.Model):
     height = models.IntegerField(blank=True, null=True)
     user = models.ForeignKey(User, null=True, blank=True)
     thumbnail2 = models.ImageField(upload_to="images/", blank=True, null=True)
+    thumb = models.ImageField(upload_to="images/", blank=True, null=True)
 
     def save(self, *args, **kwargs):
         """Save image dimensions."""
@@ -51,7 +52,7 @@ class Image(models.Model):
 
         # Large thumbnail
         fn, ext = os.path.splitext(self.image.name)
-        im.thumbnain((128, 128), PImage.ANTIALIAS)
+        im.thumbnail((256, 256), PImage.ANTIALIAS)
         thumb_fn = fn + "-thumb2" + ext
         tf2 = NamedTemporaryFile()
         im.save(tf2.name, "JPEG")
@@ -59,11 +60,11 @@ class Image(models.Model):
         tf2.close()
 
         # Small thumbnail
-        im.thumbnain((40, 40), PImage.ANTIALIAS)
+        im.thumbnail((40, 40), PImage.ANTIALIAS)
         thumb_fn = fn + "-thumb" + ext
         tf = NamedTemporaryFile()
         im.save(tf.name, "JPEG")
-        self.thumbnail2.save(thumb_fn, File(open(tf.name)), save=False)
+        self.thumb.save(thumb_fn, File(open(tf.name)), save=False)
         tf.close()
 
         super(Image, self).save(*args, **kwargs)
