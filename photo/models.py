@@ -59,14 +59,6 @@ class Image(models.Model):
         self.thumbnail2.save(thumb_fn, File(open(tf2.name)), save=False)
         tf2.close()
 
-        # Small thumbnail
-        im.thumbnail((40, 40), PImage.ANTIALIAS)
-        thumb_fn = fn + "-thumb" + ext
-        tf = NamedTemporaryFile()
-        im.save(tf.name, "JPEG")
-        self.thumb.save(thumb_fn, File(open(tf.name)), save=False)
-        tf.close()
-
         super(Image, self).save(*args, **kwargs)
 
     def size(self):
@@ -85,8 +77,8 @@ class Image(models.Model):
         return str(join(lst, ', '))
 
     def thumbnail(self):
-        return """<a href="/media/%s"><img border="0" alt="" src="/media/%s" height="40" /></a>""" % (
-            (self.image.name, self.image.name))
+        return """<a href="%s"><img border="0" alt="" src="%s" height="40" /></a>""" % (
+            (self.image.url, self.image.url))
 
     thumbnail.allow_tags = True
 
