@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^/?$', 'photo.views.main'),
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
     url(r"^(\d+)/$", "photo.views.album"),
+    url(r"^image/(\d+)/$", "photo.views.image"),
 ]

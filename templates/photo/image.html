@@ -1,0 +1,20 @@
+{% extends "pbase.html" %}
+
+{% block content %}
+    <div class="container">
+        <a href="{{ backurl }}">&lt;&lt; back</a>
+        <!-- Image -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {% if image.title %}
+                <h2>{{ image.title }}</h2>
+                {% endif %}
+            </div>
+            <div class="panel-body">
+                <p class="text-justify">{{ image.tags_ }}</p>
+                <img class="img-responsive" border="0" alt="" src="{{ media_url }}{{ image.image.url }}" />
+            </div>
+        </div
+    </div>
+
+{% endblock %}

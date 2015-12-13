@@ -52,4 +52,12 @@ def album(request, pk):
     except (InvalidPage, EmptyPage):
         images = paginator.page(paginator.num_pages)
 
-    return render_to_response("photo/album.html", dict(album=album, images=images, user=request.user, media_url=MEDIA_URL))
+    return render_to_response("photo/album.html", dict(album=album, images=images, user=request.user,
+                                                       media_url=MEDIA_URL))
+
+
+def image(request, pk):
+    """Image page."""
+    img = Image.objects.get(pk=pk)
+    return render_to_response("photo/image.html", dict(image=img, user=request.user,
+                                                       backurl=request.META["HTTP_REFERER"], media_url=MEDIA_URL))

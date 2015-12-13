@@ -10,8 +10,8 @@
             <div class="panel-body row">
                 {% for img in images.object_list %}
                     <div class="col-sm-6 col-md-4 thumbnail">
-                        <a href="{{ media_url }}{{ img.image.name }}">
-                            <img border="0" alt="" src="{{ media_url }}{{ img.thumbnail2.url }}" />
+                        <a href="{% url 'photo.views.image' img.pk %}">
+                            <img border="0" alt="" src="{{ img.thumbnail2.url }}" />
                         </a>
                         <div class="caption">
                                 <h3 class="text-center">{{ img.title }}</h3>
@@ -24,19 +24,19 @@
     </div>
 
     <!-- Next/Prev page links -->
-    {% if albums.objects_list and albums.paginator.num_pages > 1 %}
+    {% if images.objects_list and images.paginator.num_pages > 1 %}
     <div class="paginator">
         <span class="step-links">
-            {% if albums.has_previous %}
-                <a href="?page={{ albums.previous_page_number }}">previous &lt;&lt;</a>
+            {% if images.has_previous %}
+                <a href="?page={{ images.previous_page_number }}">previous &lt;&lt;</a>
             {% endif %}
 
             <span class="current">
-                &nbps;Page {{ albums.number }} of {{ albums.paginator.num_pages }}
+                &nbps;Page {{ images.number }} of {{ images.paginator.num_pages }}
             </span>
 
-            {% if albums.has_next %}
-                <a href="?page={{ albums.next_page_number }}"> &gt;&gt; next</a>
+            {% if images.has_next %}
+                <a href="?page={{ images.next_page_number }}"> &gt;&gt; next</a>
             {% endif %}
         </span>
     </div>
