@@ -15,8 +15,10 @@ def main(request):
         albums = albums.filter(public=True)
 
     paginator = Paginator(albums, 10)
-    try: page = int(request.GET.get("page", '1'))
-    except ValueError: page = 1
+    try:
+        page = int(request.GET.get("page", '1'))
+    except ValueError:
+        page = 1
 
     try:
         albums = paginator.page(page)

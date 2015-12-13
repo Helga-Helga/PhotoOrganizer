@@ -52,7 +52,7 @@ class Image(models.Model):
 
         # Large thumbnail
         fn, ext = os.path.splitext(self.image.name)
-        im.thumbnail((256, 256), PImage.ANTIALIAS)
+        im.thumbnail((140, 140), PImage.ANTIALIAS)
         thumb_fn = fn + "-thumb2" + ext
         tf2 = NamedTemporaryFile()
         im.save(tf2.name, "JPEG")
@@ -75,7 +75,6 @@ class Image(models.Model):
     def albums_(self):
         lst = [album.title for album in Album.objects.filter(image=self)]
         return str(join(lst, ', '))
-
     def thumbnail(self):
         return """<a href="%s"><img border="0" alt="" src="%s" height="40" /></a>""" % (
             (self.image.url, self.image.url))

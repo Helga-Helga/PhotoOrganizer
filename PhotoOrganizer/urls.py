@@ -20,6 +20,7 @@ from PhotoOrganizer import settings
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-    url(r'^/?', 'photo.views.main'),
+    url(r'^/?$', 'photo.views.main'),
+    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
 ]
 

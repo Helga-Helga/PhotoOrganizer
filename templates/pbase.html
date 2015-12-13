@@ -1,2 +1,69 @@
-{% block content %}
-{% endblock %}
+{% load staticfiles %}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>{% block title %}PhotoApp{% endblock %}</title>
+    <!-- <meta http-equiv="refresh" content="2">  -->
+    <link href="{% static "bootstrap-3.3.6-dist/css/bootstrap.min.css" %}" rel="stylesheet">
+</head>
+
+<body>
+{#    <div id="sidebar"> {% block sidebar %} {% endblock %} </div>#}
+{#    <div id="container">#}
+{#        <div id="menu">#}
+{#            {% block nav-global %}#}
+{##}
+{#                <!-- MENU -->#}
+{#                <h3><a href="{% url 'photo.views.main' %}">PhotoApp</a></h3>#}
+{#                {% if user.is_staff %}#}
+{#                <a href="{% url 'admin:index' %}">Admin</a>#}
+{#                <a href="{% url 'admin:photo_image_add' %}">Add Image</a>#}
+{#                <a href="{% url 'photo.views.search' %}">Search</a>#}
+{#                {% endif %}#}
+{##}
+{#            {% endblock %}#}
+{#        </div>#}
+{##}
+{#        <div id="content">#}
+{#            {% block content %}{% endblock %}#}
+{#        </div>#}
+{#    </div>#}
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">+</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Helga's Photo Gallery</a>
+            </div>
+
+            <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    {% block nav-global %}
+                        <!-- MENU -->
+                        <li class="active"><a href="{% url 'photo.views.main' %}">PhotoApp</a></li>
+                        {% if user.is_staff %}
+                            <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                            <li><a href="{% url 'admin:photo_image_add' %}">Add Image</a></li>
+                            {#            <a href="{% url 'photo.views.search' %}">Search</a>#}
+                        {% endif %}
+                    {% endblock %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>
