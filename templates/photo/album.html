@@ -7,16 +7,29 @@
             <div class="panel-heading">
                 <h2>{{ album.title }}</h2>
             </div>
+
             <div class="panel-body row">
+                <div>
+                    View:
+                    <a href="{% url 'photo.views.album' album.pk 'thumbnails'%}">thumbnails</a>
+                    <a href="{% url 'photo.views.album' album.pk 'full' %}">full</a>&nbsp;
+                </div>
                 {% for img in images.object_list %}
-                    <div class="col-sm-6 col-md-4 thumbnail">
+                    {% if view == "full" %}
+                        <div class="col-sm-6 col-md-4 thumbnail">
+                        <a href="{% url 'photo.views.image' img.pk %}">
+                            <img border="0" alt="" src="{{ img.image.url }}" />
+                        </a>
+                    {% else %}
+                        <div class="col-sm-3 col-md-2 thumbnail">
                         <a href="{% url 'photo.views.image' img.pk %}">
                             <img border="0" alt="" src="{{ img.thumbnail2.url }}" />
                         </a>
-                        <div class="caption">
-                                <h3 class="text-center">{{ img.title }}</h3>
-                                <p class="text-justify">{{ img.tags_ }}</p>
-                        </div>
+                    {% endif %}
+                    <div class="caption">
+                        <h3 class="text-center">{{ img.title }}</h3>
+                        <p class="text-justify">{{ img.tags_ }}</p>
+                    </div>
                     </div>
                 {% endfor %}
             </div>

@@ -8,7 +8,7 @@
             <div class="panel panel-default">
             <div class="panel-heading">
                 <h2>
-                    <a href="{% url 'photo.views.album' album.pk %}">{{ album.title }}</a>
+                    <a href="{% url 'photo.views.album' album.pk  'thumbnails'%}">{{ album.title }}</a>
                     <small>({{ album.image_set.count }} images)</small>
                 </h2>
             </div>
