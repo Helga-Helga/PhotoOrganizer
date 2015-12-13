@@ -92,7 +92,6 @@ class TagAdmin(admin.ModelAdmin):
 
 
 class ImageAdmin(admin.ModelAdmin):
-    # search_fields = ["title"]
     list_display = ["title", "user", "rating", "size", "tags_", "albums_", "thumbnail", "created"]
     list_filter = ["tags", "albums", "user"]
 

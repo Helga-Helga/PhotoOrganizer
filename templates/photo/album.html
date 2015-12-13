@@ -2,29 +2,26 @@
 
 {% block content %}
     <div class="container">
-
-        <!-- Albums -->
-        {% for album in albums.object_list %}
-            <div class="panel panel-default">
+        <!-- Images -->
+        <div class="panel panel-default">
             <div class="panel-heading">
-                <h2>
-                    <a href="{% url 'photo.views.album' album.pk %}">{{ album.title }}</a>
-                    <small>({{ album.image_set.count }} images)</small>
-                </h2>
+                <h2>{{ album.title }}</h2>
             </div>
             <div class="panel-body row">
-                {%  for img in album.images %}
+                {% for img in images.object_list %}
                     <div class="col-sm-6 col-md-4 thumbnail">
-                        <a href="{{ img.image.url }}"><img border="0" alt="" src="{{ img.thumbnail2.url }}" /></a>
+                        <a href="{{ media_url }}{{ img.image.name }}">
+                            <img border="0" alt="" src="{{ media_url }}{{ img.thumbnail2.url }}" />
+                        </a>
                         <div class="caption">
-                            <h3 class="text-center">{{ img.title }}</h3>
-                            <p class="text-justify">{{ img.tags_ }}</p>
+                                <h3 class="text-center">{{ img.title }}</h3>
+                                <p class="text-justify">{{ img.tags_ }}</p>
                         </div>
                     </div>
                 {% endfor %}
             </div>
-            </div>
-        {% endfor %}
+        </div>
+    </div>
 
     <!-- Next/Prev page links -->
     {% if albums.objects_list and albums.paginator.num_pages > 1 %}
@@ -44,7 +41,5 @@
         </span>
     </div>
     {% endif %}
-
-    </div>
 
 {% endblock %}
