@@ -12,19 +12,53 @@
                 <div>
                     View:
                     <a href="{% url 'photo.views.album' album.pk 'thumbnails'%}">thumbnails</a>
-                    <a href="{% url 'photo.views.album' album.pk 'full' %}">full</a>&nbsp;
+                    <a href="{% url 'photo.views.album' album.pk 'full' %}">full</a>
+                    <a href="{% url 'photo.views.album' album.pk 'edit' %}">edit</a>
                 </div>
+
+                {% if view == "edit" %}
+                    <form action="{% url 'photo.views.update' %}" method="POST">{% csrf_token %}
+                {% endif %}
                 {% for img in images.object_list %}
+
+                    <!-- FULL VIEW -->
                     {% if view == "full" %}
                         <div class="col-sm-6 col-md-4 thumbnail">
                         <a href="{% url 'photo.views.image' img.pk %}">
                             <img border="0" alt="" src="{{ img.image.url }}" />
                         </a>
-                    {% else %}
+                    {% endif %}
+
+                    <!-- EDIT VIEW -->
+                    {% if view == "edit" %}
+                        <table>
+                            <tr><td>
+                            <div class="col-sm-3 col-md-2 thumbnail">
+                                    <a href="{% url 'photo.views.image' img.pk %}">
+                                        <img border="0" alt="" src="{{ img.thumbnail2.url }}" />
+                                    </a>
+                                </div>
+                            </td><td>
+                            Title: <input type="text" name="title-{{ img.pk }}" value="{{ img.title }}" /><br />
+                            Tags: <input type="text" name="tags-{{ img.pk }}" value="{{ img.tag.lst }}" /><br />
+                            Rating: <input size="3" type="text" name="rating-{{ img.pk }}" value="{{ img.rating }}" /><br />
+                            {% for album in albums %}
+                                {{ album.title }}
+                                <input type="checkbox" name="album-{{ img.pk }}" value="{{ album.pk }}"
+                                       {% if album.title in img.album_lst %}checked{% endif %} />
+                            {% endfor %}
+                            </td></tr>
+                        </table><br />
+                    {% endif %}
+                    <!-- THUMBNAILS VIEW -->
+                    {% if view == "thumbnails" %}
                         <div class="col-sm-3 col-md-2 thumbnail">
                         <a href="{% url 'photo.views.image' img.pk %}">
                             <img border="0" alt="" src="{{ img.thumbnail2.url }}" />
                         </a>
+                    {% endif %}
+                    {% if view == "edit" %}
+                        <div id="update"><input type="submit" value="Update"></div></form>
                     {% endif %}
                     <div class="caption">
                         <h3 class="text-center">{{ img.title }}</h3>
@@ -32,7 +66,6 @@
                     </div>
                     </div>
                 {% endfor %}
-            </div>
         </div>
     </div>
 

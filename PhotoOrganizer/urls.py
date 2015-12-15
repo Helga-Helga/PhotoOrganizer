@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^/?$', 'photo.views.main'),
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
-    url(r"^(\d+)/(full|thumbnails)/$", "photo.views.album"),
+    url(r"^(\d+)/(full|thumbnails|edit)/$", "photo.views.album"),
     url(r"^image/(\d+)/$", "photo.views.image"),
+    url(r"^update/$", "photo.views.update"),
 ]

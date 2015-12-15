@@ -55,8 +55,14 @@ def album(request, pk, view="thumbnail"):
     except (InvalidPage, EmptyPage):
         images = paginator.page(paginator.num_pages)
 
-    return render_to_response("photo/album.html", dict(album=album, images=images, user=request.user, view=view,
-                                                       media_url=MEDIA_URL))
+    for img in images.object_list:
+        tags = [x[1] for x in img.tags.values_list()]
+        img.tag_lst = join(tags, ', ')
+        img.album_lst = [x[1] for x in img.albums.values_list()]
+
+    d = dict(album=album, images=images, user=request.user, view=view, albums=Album.objects.all(), media_url=MEDIA_URL)
+    d.update(csrf(request))
+    return render_to_response("photo/album.html", d)
 
 
 def image(request, pk):
@@ -64,3 +70,38 @@ def image(request, pk):
     img = Image.objects.get(pk=pk)
     return render_to_response("photo/image.html", dict(image=img, user=request.user,
                                                        backurl=request.META["HTTP_REFERER"], media_url=MEDIA_URL))
+
+
+def update(request):
+    """Updating image, title, rating, tags, albums."""
+    p = request.POST
+    images = defaultdict(dict)
+
+    # Create dictionary of properties for each image
+    for k, v in p.items():
+        if k.startswith("title") or k.startswith("rating") or k.startswith("tags"):
+            k, pk = k.split('-')
+            images[pk][k] = v
+        elif k.startswith("album"):
+            pk = k.split('-')[1]
+            images[pk]["albums"] = p.getlist(k)
+
+
+    # Process properties, assign to image objects and save
+    for k, d, in images.items():
+        image = Image.objects.get(pk=k)
+        image.title = d["title"]
+        image.rating = int(d["rating"])
+
+    # Tags -- assign or create if a new tag!
+    tags = d["tags"].split(', ')
+    lst = []
+    for t in tags:
+        if t: lst.append(Tag.objects.get_or_create(tag=t)[0])
+    image.tags = lst
+
+    if "albums" in d:
+        image.albums = d["albums"]
+        image.save()
+
+    return HttpResponseRedirect(request.META["HTTP_REFERER"], dict(media_url=MEDIA_URL))
