@@ -21,20 +21,10 @@ class Album(models.Model):
         lst = [x.image.name for x in Image.objects.all()]
         lst = ["<a href='/media/%s'>%s</a>" % (x, x.split('/')[-1]) for x in lst]
         return join(lst, ', ')
-    images.allow_tags = True
-
-
-class Tag(models.Model):
-    tag = models.CharField(max_length=50)
-
-    def __unicode__(self):
-        return self.tag
-
 
 class Image(models.Model):
     title = models.CharField(max_length=60, blank=True, null=True)
     image = models.FileField(upload_to="images/")
-    tags = models.ManyToManyField(Tag, blank=True)
     albums = models.ManyToManyField(Album, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=50)
@@ -68,10 +58,6 @@ class Image(models.Model):
     def __unicode__(self):
         return self.image.name
 
-    def tags_(self):
-        lst = [tag.tag for tag in Tag.objects.filter(image=self)]
-        return str(join(lst, ', '))
-
     def albums_(self):
         lst = [album.title for album in Album.objects.filter(image=self)]
         return str(join(lst, ', '))
@@ -79,7 +65,6 @@ class Image(models.Model):
         return """<a href="%s"><img border="0" alt="" src="%s" height="40" /></a>""" % (
             (self.image.url, self.image.url))
 
-    thumbnail.allow_tags = True
 
 
 class AlbumAdmin(admin.ModelAdmin):
@@ -87,19 +72,14 @@ class AlbumAdmin(admin.ModelAdmin):
     list_display = ["title", "images"]
 
 
-class TagAdmin(admin.ModelAdmin):
-    list_display = ["tag"]
-
-
 class ImageAdmin(admin.ModelAdmin):
-    list_display = ["title", "user", "rating", "size", "tags_", "albums_", "thumbnail", "created"]
-    list_filter = ["tags", "albums", "user"]
+    list_display = ["title", "user", "rating", "size", "albums_", "thumbnail", "created"]
+    list_filter = [ "albums", "user"]
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
         obj.save()
 
 admin.site.register(Album, AlbumAdmin)
-admin.site.register(Tag, TagAdmin)
 admin.site.register(Image, ImageAdmin)
 

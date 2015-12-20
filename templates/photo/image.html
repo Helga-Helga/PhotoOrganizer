@@ -1,18 +1,17 @@
 {% extends "pbase.html" %}
 {% block content %}
     <div class="container">
-        <a href="{{ backurl }}">
-            <span class="glyphicon glyphicon-triangle-left">Back</span>
-        </a>
         <!-- Image -->
         <div class="panel panel-default">
             <div class="panel-heading">
+                <a href="{{ backurl }}">
+                    <span class="glyphicon glyphicon-triangle-left">Back</span>
+                </a>
                 {% if image.title %}
                 <h2>{{ image.title }}</h2>
                 {% endif %}
             </div>
             <div class="panel-body">
-                <p class="text-justify">{{ image.tags_ }}</p>
                 <img class="img-responsive" border="0" alt="" src="{{ media_url }}{{ image.image.url }}" />
             </div>
         </div

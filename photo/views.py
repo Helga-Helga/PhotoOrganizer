@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.context_processors import csrf
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.forms import ModelForm
-from photo.models import Album, Image, Tag
+from photo.models import Album, Image
 
 
 def main(request):
@@ -56,11 +56,10 @@ def album(request, pk, view="thumbnail"):
         images = paginator.page(paginator.num_pages)
 
     for img in images.object_list:
-        tags = [x[1] for x in img.tags.values_list()]
-        img.tag_lst = join(tags, ', ')
         img.album_lst = [x[1] for x in img.albums.values_list()]
 
-    d = dict(album=album, images=images, user=request.user, view=view, albums=Album.objects.all(), media_url=MEDIA_URL)
+    d = dict(album=album, images=images, user=request.user, view=view, albums=Album.objects.all(), media_url=MEDIA_URL,
+             backurl=request.META["HTTP_REFERER"])
     d.update(csrf(request))
     return render_to_response("photo/album.html", d)
 
@@ -73,13 +72,13 @@ def image(request, pk):
 
 
 def update(request):
-    """Updating image, title, rating, tags, albums."""
+    """Updating image, title, rating, albums."""
     p = request.POST
     images = defaultdict(dict)
 
     # Create dictionary of properties for each image
     for k, v in p.items():
-        if k.startswith("title") or k.startswith("rating") or k.startswith("tags"):
+        if k.startswith("title") or k.startswith("rating"):
             k, pk = k.split('-')
             images[pk][k] = v
         elif k.startswith("album"):
@@ -92,13 +91,6 @@ def update(request):
         image = Image.objects.get(pk=k)
         image.title = d["title"]
         image.rating = int(d["rating"])
-
-    # Tags -- assign or create if a new tag!
-    tags = d["tags"].split(', ')
-    lst = []
-    for t in tags:
-        if t: lst.append(Tag.objects.get_or_create(tag=t)[0])
-    image.tags = lst
 
     if "albums" in d:
         image.albums = d["albums"]
