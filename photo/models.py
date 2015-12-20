@@ -1,13 +1,15 @@
 import os
+from string import join
+from os.path import join as pjoin
+from PIL import Image as PImage
+from tempfile import *
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib import admin
 from django.core.files import File
-from string import join
-from os.path import join as pjoin
-from PIL import Image as PImage
+
 from PhotoOrganizer.settings import MEDIA_ROOT
-from tempfile import *
 
 
 class Album(models.Model):
@@ -21,6 +23,7 @@ class Album(models.Model):
         lst = [x.image.name for x in Image.objects.all()]
         lst = ["<a href='/media/%s'>%s</a>" % (x, x.split('/')[-1]) for x in lst]
         return join(lst, ', ')
+
 
 class Image(models.Model):
     title = models.CharField(max_length=60, blank=True, null=True)
@@ -61,10 +64,10 @@ class Image(models.Model):
     def albums_(self):
         lst = [album.title for album in Album.objects.filter(image=self)]
         return str(join(lst, ', '))
+
     def thumbnail(self):
         return """<a href="%s"><img border="0" alt="" src="%s" height="40" /></a>""" % (
             (self.image.url, self.image.url))
-
 
 
 class AlbumAdmin(admin.ModelAdmin):
@@ -74,11 +77,12 @@ class AlbumAdmin(admin.ModelAdmin):
 
 class ImageAdmin(admin.ModelAdmin):
     list_display = ["title", "user", "rating", "size", "albums_", "thumbnail", "created"]
-    list_filter = [ "albums", "user"]
+    list_filter = ["albums", "user"]
 
     def save_model(self, request, obj, form, change):
         obj.user = request.user
         obj.save()
+
 
 admin.site.register(Album, AlbumAdmin)
 admin.site.register(Image, ImageAdmin)

@@ -1,13 +1,11 @@
 from collections import defaultdict
-from string import join
+
 from django.conf.global_settings import MEDIA_URL
-from django.db.models import Q
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth.decorators import login_required
 from django.core.context_processors import csrf
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from django.forms import ModelForm
+
 from photo.models import Album, Image
 
 
