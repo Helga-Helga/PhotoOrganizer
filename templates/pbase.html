@@ -49,11 +49,10 @@
                 <ul class="nav navbar-nav">
                     {% block nav-global %}
                         <!-- MENU -->
-                        <li class="active"><a href="{% url 'photo.views.main' %}">PhotoApp</a></li>
+                        <li><a href="{% url 'photo.views.main' %}">PhotoApp</a></li>
                         {% if user.is_staff %}
+                            <li><a href="{% url 'photo.views.add' %}">Add Image</a></li>
                             <li><a href="{% url 'admin:index' %}">Admin</a></li>
-                            <li><a href="{% url 'admin:photo_image_add' %}">Add Image</a></li>
-                            {#            <a href="{% url 'photo.views.search' %}">Search</a>#}
                         {% endif %}
                     {% endblock %}
                 </ul>

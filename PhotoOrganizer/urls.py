@@ -27,4 +27,5 @@ urlpatterns = [
     url(r"^(\d+)/(full|thumbnails|edit)/$", "photo.views.album"),
     url(r"^image/(\d+)/$", "photo.views.image"),
     url(r"^update/$", "photo.views.update"),
+    url(r"^add/$", "photo.views.add"),
 ]

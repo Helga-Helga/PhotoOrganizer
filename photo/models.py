@@ -8,6 +8,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib import admin
 from django.core.files import File
+from django.forms import ModelForm
 
 from PhotoOrganizer.settings import MEDIA_ROOT
 
@@ -26,9 +27,9 @@ class Album(models.Model):
 
 
 class Image(models.Model):
-    title = models.CharField(max_length=60, blank=True, null=True)
+    title = models.CharField(max_length=60, blank=False, null=False)
     image = models.FileField(upload_to="images/")
-    albums = models.ManyToManyField(Album, blank=True)
+    albums = models.ManyToManyField(Album, blank=False)
     created = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=50)
     width = models.IntegerField(blank=True, null=True)
@@ -82,6 +83,12 @@ class ImageAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.user = request.user
         obj.save()
+
+
+class ImageForm(ModelForm):
+    class Meta:
+        model = Image
+        fields = ['title', 'image', 'rating', 'albums']
 
 
 admin.site.register(Album, AlbumAdmin)

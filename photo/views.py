@@ -1,11 +1,11 @@
 from collections import defaultdict
 
 from django.conf.global_settings import MEDIA_URL
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.context_processors import csrf
 
-from photo.models import Album, Image
+from photo.models import Album, Image, ImageForm
 
 
 def main(request):
@@ -77,3 +77,22 @@ def update(request):
         image.save()
 
     return HttpResponseRedirect(request.META["HTTP_REFERER"], dict(media_url=MEDIA_URL))
+
+
+def add(request):
+    """Updating image, title, rating, albums."""
+    d = dict()
+    d.update(csrf(request))
+    d['media_url'] = MEDIA_URL
+    d['user'] = request.user
+    if not request.POST:
+        d['image_form'] = ImageForm()
+        return render_to_response("photo/add.html", d)
+
+    image_form = ImageForm(request.POST, request.FILES)
+    if image_form.is_valid():
+        image_form.save()
+        return redirect('photo.views.main')
+    else:
+        d['image_form'] = image_form
+    return render_to_response("photo/add.html", d)
