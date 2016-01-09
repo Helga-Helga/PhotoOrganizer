@@ -4,7 +4,6 @@ from django.conf.global_settings import MEDIA_URL
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.context_processors import csrf
-from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
 from photo.models import Album, Image
 
@@ -15,49 +14,28 @@ def main(request):
     if not request.user.is_authenticated():
         albums = albums.filter(public=True)
 
-    paginator = Paginator(albums, 10)
-    try:
-        page = int(request.GET.get("page", '1'))
-    except ValueError:
-        page = 1
-
-    try:
-        albums = paginator.page(page)
-    except (InvalidPage, EmptyPage):
-        albums = paginator.page(paginator.num_pages)
-
-    for album in albums.object_list:
-        album.images = album.image_set.all()
+    for album in albums:
+        album.images = album.image_set.all().extra(select={'size': '(1.*width)/height'}, order_by=['-size'])
 
     return render_to_response("photo/list.html", dict(albums=albums, user=request.user))
 
 
 def album(request, pk, view="thumbnail"):
     """Album listing."""
-    num_images = 30
-    if view == "full":
-        num_images = 10
 
     album = Album.objects.get(pk=pk)
     if not album.public and not request.user.is_authenticated():
         return HttpResponse("Error: you need to be logged in to view this album.")
-    images = album.image_set.all()
-    paginator = Paginator(images, num_images)
-    try:
-        page = int(request.GET.get("page", '1'))
-    except ValueError:
-        page = 1
+    images = album.image_set.all().extra(select={'size': '(1.*width)/height'}, order_by=['-size'])
 
-    try:
-        images = paginator.page(page)
-    except (InvalidPage, EmptyPage):
-        images = paginator.page(paginator.num_pages)
-
-    for img in images.object_list:
+    for img in images:
         img.album_lst = [x[1] for x in img.albums.values_list()]
-
+    if 'HTTP_REFERER' in request.META:
+        backurl = request.META["HTTP_REFERER"]
+    else:
+        backurl = '/'
     d = dict(album=album, images=images, user=request.user, view=view, albums=Album.objects.all(), media_url=MEDIA_URL,
-             backurl=request.META["HTTP_REFERER"])
+             backurl=backurl)
     d.update(csrf(request))
     return render_to_response("photo/album.html", d)
 
@@ -65,8 +43,12 @@ def album(request, pk, view="thumbnail"):
 def image(request, pk):
     """Image page."""
     img = Image.objects.get(pk=pk)
+    if 'HTTP_REFERER' in request.META:
+        backurl = request.META["HTTP_REFERER"]
+    else:
+        backurl = '/'
     return render_to_response("photo/image.html", dict(image=img, user=request.user,
-                                                       backurl=request.META["HTTP_REFERER"], media_url=MEDIA_URL))
+                                                       backurl=backurl, media_url=MEDIA_URL))
 
 
 def update(request):

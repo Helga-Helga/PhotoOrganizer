@@ -19,7 +19,7 @@
                     <a href="{% url 'photo.views.album' album.pk 'full' %}">full</a>
                     <a href="{% url 'photo.views.album' album.pk 'edit' %}">edit</a>
                 </div>
-                {% for img in images.object_list %}
+                {% for img in images %}
                     <!-- EDIT VIEW -->
                     {% if view == "edit" %}
                         <div class="media">
@@ -54,44 +54,32 @@
                             </div>
                         </div>
                     {% else %}
-                        <div class="col-sm-6 col-md-4 thumbnail">
-                            <a href="{% url 'photo.views.image' img.pk %}">
-                                {% if view == "thumbnails" %}
-                                    <!-- THUMBNAILS VIEW -->
-                                    <img border="0" alt="" src="{{ img.thumbnail2.url }}"/>
-                                {% else %}
-                                    <!-- FULL VIEW -->
-                                    <img border="0" alt="" src="{{ img.image.url }}"/>
-                                {% endif %}
-                            </a>
+                        {% if view == "thumbnails" %}
+                            <!-- THUMBNAILS VIEW -->
+                            <div class="col-md-2">
+                        {% else %}
+                            <!-- FULL VIEW -->
+                            <div class="col-md-4">
+                        {% endif %}
+                    <div class="thumbnail">
+                        <a href="{% url 'photo.views.image' img.pk %}">
+                            {% if view == "thumbnails" %}
+                                <!-- THUMBNAILS VIEW -->
+                                <img border="0" alt="" src="{{ img.thumbnail2.url }}"/>
+                            {% else %}
+                                <!-- FULL VIEW -->
+                                <img border="0" alt="" src="{{ img.image.url }}"/>
+                            {% endif %}
+                        </a>
 
-                            <div class="caption">
-                                <h3 class="text-center">{{ img.title }}</h3>
+                        <div class="caption">
+                            <h3 class="text-center">{{ img.title }}</h3>
 
+                        </div>
                             </div>
                         </div>
                     {% endif %}
                 {% endfor %}
             </div>
         </div>
-
-        <!-- Next/Prev page links -->
-        {% if images.objects_list and images.paginator.num_pages > 1 %}
-            <div class="paginator">
-        <span class="step-links">
-            {% if images.has_previous %}
-                <a href="?page={{ images.previous_page_number }}">previous &lt;&lt;</a>
-            {% endif %}
-
-            <span class="current">
-                &nbps;Page {{ images.number }} of {{ images.paginator.num_pages }}
-            </span>
-
-            {% if images.has_next %}
-                <a href="?page={{ images.next_page_number }}"> &gt;&gt; next</a>
-            {% endif %}
-        </span>
-            </div>
-        {% endif %}
-
 {% endblock %}
