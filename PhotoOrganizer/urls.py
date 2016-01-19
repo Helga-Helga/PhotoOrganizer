@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.contrib.auth.views import login
 
 from PhotoOrganizer import settings
 
@@ -28,4 +29,5 @@ urlpatterns = [
     url(r"^image/(\d+)/$", "photo.views.image"),
     url(r"^update/$", "photo.views.update"),
     url(r"^add/$", "photo.views.add"),
+    url(r'^login/$', login, {'template_name': 'admin/login.html'}),
 ]

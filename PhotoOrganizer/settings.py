@@ -116,3 +116,4 @@ DJANGO_ROOT = dirname(dirname(abspath(__file__)))
 MEDIA_ROOT = normpath(join(DJANGO_ROOT, 'media'))
 STATIC_ROOT = normpath(join(DJANGO_ROOT, 'static'))
 
+LOGIN_REDIRECT_URL = '/'
