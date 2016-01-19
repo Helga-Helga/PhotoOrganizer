@@ -52,7 +52,7 @@
                         <li><a href="{% url 'photo.views.main' %}">PhotoApp</a></li>
                         {% if user.is_staff %}
                             <li><a href="{% url 'photo.views.add' %}">Add Image</a></li>
-                            <li><a href="/login">Log in</a></li>c
+                            <li><a href="/login">Log in</a></li>
                             <li><a href="{% url 'admin:index' %}">Admin</a></li>
                         {% endif %}
                     {% endblock %}
