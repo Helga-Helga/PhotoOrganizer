@@ -91,6 +91,12 @@ class ImageForm(ModelForm):
         fields = ['title', 'image', 'rating', 'albums']
 
 
+class AlbumForm(ModelForm):
+    class Meta:
+        model = Album
+        fields = ['title', 'public']
+
+
 admin.site.register(Album, AlbumAdmin)
 admin.site.register(Image, ImageAdmin)
 

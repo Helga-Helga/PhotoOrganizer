@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.context_processors import csrf
 
-from photo.models import Album, Image, ImageForm
+from photo.models import Album, Image, ImageForm, AlbumForm
 
 
 def main(request):
@@ -96,3 +96,21 @@ def add(request):
     else:
         d['image_form'] = image_form
     return render_to_response("photo/add.html", d)
+
+
+def add_album(request):
+    d = dict()
+    d.update(csrf(request))
+    d['media_url'] = MEDIA_URL
+    d['user'] = request.user
+    if not request.POST:
+        d['album_form'] = AlbumForm()
+        return render_to_response("photo/add_album.html", d)
+
+    album_form = AlbumForm(request.POST)
+    if album_form.is_valid():
+        album_form.save()
+        return redirect('photo.views.main')
+    else:
+        d['image_form'] = album_form
+    return render_to_response("photo/add_album.html", d)
