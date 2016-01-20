@@ -4,10 +4,9 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>{% block title %}PhotoApp{% endblock %}</title>
-    <!-- <meta http-equiv="refresh" content="2">  -->
+    <title>{% block title %}PhotoApp{% endblock %}</title
     <link href="{% static "bootstrap-3.3.6-dist/css/bootstrap.min.css" %}" rel="stylesheet">
-</head>
+</head
 
 <body>
 <div class="container">
@@ -25,19 +24,17 @@
                 <a class="navbar-brand" href="/">Helga's Photo Gallery</a>
             </div>
 
-            <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-c/admin/ollapse-1">
+            <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-c/admin/collapse-1">
                 <ul class="nav navbar-nav">
                     {% block nav-global %}
                         <!-- MENU -->
                         <li><a href="{% url 'photo.views.main' %}">PhotoApp</a></li>
-                        {% if user.is_staff %}
-                            <li><a href="{% url 'photo.views.add_album' %}">Add Album</a></li>
-                            <li><a href="{% url 'photo.views.add' %}">Add Image</a></li>
-                            <li><a href="{% url 'admin:index' %}">Admin</a></li>
-                        {% endif %}
                         {% if user.id == None %}
                             <li><a href="/login">Log in</a></li>
                         {% else %}
+                            <li><a href="{% url 'photo.views.add_album' %}">Add Album</a></li>
+                            <li><a href="{% url 'photo.views.add' %}">Add Image</a></li>
+                            <li><a href="{% url 'admin:index' %}">Admin</a></li
                             <li><a href="/logout">Log out</a></li>
                         {% endif %}
                     {% endblock %}
