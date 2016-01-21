@@ -4,9 +4,9 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-    <title>{% block title %}PhotoApp{% endblock %}</title
+    <title>{% block title %}PhotoApp{% endblock %}</title>
     <link href="{% static "bootstrap-3.3.6-dist/css/bootstrap.min.css" %}" rel="stylesheet">
-</head
+</head>
 
 <body>
 <div class="container">
@@ -34,7 +34,7 @@
                         {% else %}
                             <li><a href="{% url 'photo.views.add_album' %}">Add Album</a></li>
                             <li><a href="{% url 'photo.views.add' %}">Add Image</a></li>
-                            <li><a href="{% url 'admin:index' %}">Admin</a></li
+                            <li><a href="{% url 'admin:index' %}">Admin</a></li>
                             <li><a href="/logout">Log out</a></li>
                         {% endif %}
                     {% endblock %}
