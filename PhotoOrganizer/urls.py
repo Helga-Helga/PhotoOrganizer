@@ -31,5 +31,5 @@ urlpatterns = [
     url(r"^add/$", "photo.views.add"),
     url(r"^add_album/$", "photo.views.add_album"),
     url(r'^login/$', login, {'template_name': 'admin/login.html'}),
-    url(r'^logout/$', logout),
+    url(r'^logout/$', logout, {'next_page': "photo.views.main"}),
 ]
